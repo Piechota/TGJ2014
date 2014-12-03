@@ -2,8 +2,8 @@
 using System.Collections;
 
 public class MovementController : MonoBehaviour {
-    private float movementSpeed = 0.03f;
-    private float rotationSpeed = 2.0f;
+    public float movementSpeed = 0.03f;
+    public float rotationSpeed = 1.0f;
     public GameObject fppCamera;
     private float jumpForce = 3000.0f;
     public GroundCheckerScript groundCheck;
@@ -17,14 +17,10 @@ public class MovementController : MonoBehaviour {
     void FixedUpdate()
     {
         Vector3 direction = Vector3.zero;
-        if (Input.GetKey(KeyCode.W))
-            direction += this.transform.forward;
-        if (Input.GetKey(KeyCode.S))
-            direction -= this.transform.forward;
-        if (Input.GetKey(KeyCode.D))
-            direction += this.transform.right;
-        if (Input.GetKey(KeyCode.A))
-            direction -= this.transform.right;
+
+        direction += transform.forward * Input.GetAxisRaw("Vertical") * movementSpeed * Time.fixedDeltaTime;
+        direction += transform.right * Input.GetAxisRaw("Horizontal") * movementSpeed * Time.fixedDeltaTime;
+
         if(Input.GetKey(KeyCode.Escape))
             Application.Quit();
         if (Input.GetKey(KeyCode.L))
@@ -49,8 +45,8 @@ public class MovementController : MonoBehaviour {
 	void Update () {
 
         //Rotating
-        transform.Rotate(Vector3.up, rotationSpeed * Input.GetAxis("Mouse X"));
-        fppCamera.transform.localEulerAngles = new Vector3(-rotationSpeed * Input.GetAxis("Mouse Y") + fppCamera.transform.localEulerAngles.x, 0);
+        transform.Rotate(Vector3.up, rotationSpeed * Input.GetAxis("RightHorizontal") * Time.deltaTime);
+        fppCamera.transform.localEulerAngles = new Vector3(rotationSpeed * Input.GetAxis("RightVertical") * Time.deltaTime + fppCamera.transform.localEulerAngles.x, 0);
 
         //Jumping
         if (Input.GetButtonDown("Jump") && groundCheck.Grounded)

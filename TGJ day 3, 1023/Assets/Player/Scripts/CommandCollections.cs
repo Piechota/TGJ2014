@@ -42,7 +42,7 @@ public class CommandCollections : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetButtonDown("Die"))
             Die();
 
         if (Input.GetKeyDown(KeyCode.T))
