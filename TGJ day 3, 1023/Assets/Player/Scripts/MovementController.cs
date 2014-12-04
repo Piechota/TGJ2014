@@ -29,11 +29,11 @@ public class MovementController : MonoBehaviour {
         Screen.showCursor = false;
         direction.Normalize();
 
-        if (!audio.isPlaying && direction.magnitude > 0)
+        if (!audio.isPlaying && direction.magnitude > 0 && groundCheck.Grounded)
         {
             audio.Play();
         }
-        else if (direction.magnitude == 0)
+        if (!groundCheck.Grounded || direction.magnitude == 0)
         {
             audio.Stop();
         }
@@ -48,22 +48,20 @@ public class MovementController : MonoBehaviour {
         transform.Rotate(Vector3.up, rotationSpeed * Input.GetAxis("RightHorizontal") * Time.deltaTime);
         fppCamera.transform.localEulerAngles = new Vector3(rotationSpeed * Input.GetAxis("RightVertical") * Time.deltaTime + fppCamera.transform.localEulerAngles.x, 0);
 
-        //Jumping
-        if (Input.GetButtonDown("Jump") && groundCheck.Grounded)
+        if (groundCheck.Grounded)
         {
-            Jump();
-            //Debug.Log("Jump performed");
+            //Jumping
+            if (Input.GetButtonDown("Jump") && groundCheck.Grounded)
+            {
+                Jump();
+                //Debug.Log("Jump performed");
+            }
         }
 
-        if (jumping && Input.GetButtonUp("Jump"))
-        {
-            jumping = false;
-        }
 	}
 
     private void Jump()
     {
         rigidbody.AddForce(Vector3.up * jumpForce);
-        jumping = true;
     }
 }
